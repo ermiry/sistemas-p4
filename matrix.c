@@ -179,3 +179,23 @@ long double matrix_max (long double* A, int sizeMat)
 	
 	return max;
 }
+long double matrix_max_multi (long double* A, int sizeMat)
+{
+	
+	long double max = 0;
+	#pragma omp parallel
+	{
+		
+		int element, totalElem;
+		totalElem = sizeMat * sizeMat;
+		#pragma omp parallel for shared(max)
+		for(element = 0; element < totalElem; element++)
+		{
+			if (*(A + element) > max) {
+				max = *(A + element);
+			}
+		}
+	}
+	
+	return max;
+}
